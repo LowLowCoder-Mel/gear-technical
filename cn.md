@@ -166,11 +166,13 @@ Gear 网络中使用了五种类型的消息:
 3. 从程序到程序
 4. 从程序到用户
 5. 从用户到用户
+
 发送消息函数的最后一个参数是要转移到 target account 的 value。在初始程序上传的特殊消息中，value 将转移到为程序新创建的帐户的余额中。
 
 消息处理包括两个步骤：
 
 ![](./img/003.png)
+
 ### 第一步
 
 Gear 网络尝试将消息发布到队列中，旨在验证 source account 有足够的余额来支付 value 和 gas_limit 的发送以及支付小额处理费用，该费用与有效负载大小呈线性关系（这是 Substrate 框架的标准包含费用，详见 Substrate 文档）。
@@ -258,6 +260,7 @@ Gear 可以运行任何编译为 WebAssembly 的语言程序，例如这个`capa
 ```rust
 static mut CHARGE: u32 = 0
 static mut LIMIT: u32 = 0;
+
 static mut DISCHARGE_HISTORY: Vec<u32> = Vec::new();
 
 #[no_mangle]
@@ -273,6 +276,7 @@ pub unsafe extern "C" fn handle() {
   }
 }
 ```
+
 完整示例，请参见我们的[测试样例](https://github.com/gear-tech/test-gear)。
 这是一个简单的程序，对传入的消息“charge”，当“charge”总量超过初始化中提供的某个限度时“discharges”。
 
@@ -289,7 +293,6 @@ pub unsafe extern "C" fn handle() {
 3. 一旦创建，程序就可以接收消息。例如: 用户可以向它发送 2000 的“charge”：
 
 ![](./img/008.png)
-
 
 4. 然后 Gear 处理这个新输入：
 
